@@ -28,17 +28,19 @@ class RegisterView(View):
 class LoginView(View):
     def get(self, request):
         form = LoginForm()
-        return render(request, 'users/login.html', {'form': form})
+        return render(request, 'users/login.html', context={'form': form})
 
     def post(self, request):
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            clean_data = form.cleaned_data
+        form2 = LoginForm(request.POST)
+        if form2.is_valid():
+            clean_data = form2.cleaned_data
 
             user = authenticate(username=clean_data['username'],password=clean_data['password'])
             if user is not None:
                 login(request, user)
                 return redirect('index') 
             else:
-                form.add_error(None, 'Invalid username or password')
-        return render(request, 'users/login.html', {'form': form})
+                form2.add_error(None, 'Invalid username or password')
+        return render(request, 'users/login.html',context={'form': form2})
+
+

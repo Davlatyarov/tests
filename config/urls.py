@@ -24,5 +24,6 @@ app_name = 'config'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.landing, name='index'),
-    path('users/', include('users.urls'))
+    path('users/', include('users.urls', namespace='users')),
+    path('places/', include('places.urls',namespace='places')),
 ]

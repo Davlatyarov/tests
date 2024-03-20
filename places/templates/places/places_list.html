@@ -1,0 +1,9 @@
+<div class="container">
+    <div class="row">
+        {% for place in places %}
+        <div class="col-md-4">
+            <a href="{% url 'places:places_desc' place_id=place.id %}" class="btn btn-primary">{{ place.name }}</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
