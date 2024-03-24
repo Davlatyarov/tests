@@ -67,28 +67,45 @@ class RegisterTestCase(TestCase):
         
         
         
-class LoginTestCase(TestCase):
+class LoginTestCase (TestCase):
     
     def test_successful_login(self):
-
-        user=User.objects.create_user(username='odam', email='odam@gmail.com', password='password1')
-        user.set_password('password1')
+        user = User.objects.create(username="ben", first_name="ben", last_name="davlatyarov")
+        user.set_password("1234")
         user.save()
-
         self.client.post(
-            reverse('users:login'),  
+            reverse("users:login"),
             data={
-                'username': 'odam', 
-                'password': 'password1',  
+                "username": "ben",
+                "password": "1234"
             }
         )
 
         user = get_user(self.client)
         self.assertTrue(user.is_authenticated)
-    
-    def test_successful_login(self):
-        login_data = {'username': 'user', 'password': 'password123'}
-        response = self.client.post(reverse('users:login'), data=login_data)
-        self.assertEqual(response.status_code, 200)
 
-        self.assertNotIn('_auth_user_id', self.client.session)
+    
+    def test_wrong_credentials(self):
+        user = User.objects.create(username="ben", first_name="ben", last_name="davlatyarov")
+        user.set_password("1234")
+        user.save()
+        self.client.post(
+            reverse("users:login"),
+            data={
+                "username": "wrong-username",
+                "password": "1234"
+            }
+        )
+
+        user = get_user(self.client)
+        self.assertFalse (user.is_authenticated)
+        self.client.post(
+            reverse("users:login"),
+            data={
+                "username": "ben",
+                "password": "wrong-password"
+            }
+        )
+
+        user = get_user(self.client)
+        self.assertFalse(user.is_authenticated)
